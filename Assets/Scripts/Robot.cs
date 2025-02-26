@@ -6,7 +6,7 @@ public class Robot : MonoBehaviour
     NavMeshAgent agent;
     [SerializeField] Transform target;
 
-    private void Awake()
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }

@@ -1,10 +1,15 @@
 using StarterAssets;
+using System.Collections;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {    
     StarterAssetsInputs starterAssetsInputs;
     [SerializeField] int damage;
+    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] Animator animator;
+    [SerializeField] ParticleSystem hitVFX;
+    const string SHOOT = "Shoot";
 
     void Awake()
     {
@@ -20,12 +25,16 @@ public class Weapon : MonoBehaviour
     {
         if (!starterAssetsInputs.shoot) return;
 
+        muzzleFlash.Play();
+        starterAssetsInputs.ShootInput(false);
+        animator.Play(SHOOT, 0, 0f);
+
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
             EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
             enemyHealth?.TakeDamage(damage);
-        }
 
-        starterAssetsInputs.ShootInput(false);
+            Instantiate(hitVFX, hit.point, Quaternion.identity);        
+        }
     }
 }
